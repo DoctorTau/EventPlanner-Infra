@@ -13,7 +13,7 @@ services:
       - "2281:8080"
     
   miniapp:
-    image: drtau/eventplanner-miniapp:1.0.0
+    image: drtau/eventplanner-miniapp:1.0.1
     container_name: event_planner_miniapp
     restart: always
     ports:
