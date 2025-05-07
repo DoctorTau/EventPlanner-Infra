@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       TOKEN: insert_token_here
-      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Username=drtau;Password=verysecret;Database=event_planner
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Username=admin;Password=admin;Database=event_planner
       TelegramBotUrl: http://telegram_bot:5000
       LLMService__Url: http://llm_service:8002
       ChatService__Url: http://chat_service:3001
