@@ -1,0 +1,48 @@
+services:
+  backend:
+    image: drtau/eventplanner-backend:latest
+    container_name: event_planner_backend
+    restart: always
+    environment:
+      TOKEN: insert_token_here
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Username=drtau;Password=verysecret;Database=event_planner
+      TelegramBotUrl: http://telegram_bot:5000
+      LLMService__Url: http://llm_service:8002
+      ChatService__Url: http://chat_service:3001
+    ports:
+      - "80:8080"
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: event_planner
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s  
+
+  redis:
+    image: redis:latest
+    container_name: telegram_bot_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  pgdata:
+  redis_data:
+    driver: local
+
