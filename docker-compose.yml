@@ -11,6 +11,9 @@ services:
       ChatService__Url: http://chat_service:3001
     ports:
       - "2281:8080"
+    depends_on:
+      - db
+      - redis
     
   miniapp:
     image: drtau/eventplanner-miniapp:1.0.1
@@ -20,6 +23,21 @@ services:
       - "2282:3000"
     environment:
       API_SERVER_BASE_URL: http://backend:8080
+
+  telegram_bot:
+    image: drtau/eventplanner-telegram-bot:1.0.0
+    container_name: event_planner_telegram_bot
+    restart: always
+    environment:
+      TELEGRAM_BOT_TOKEN: insert_token_here
+      TELEGRAM_BOT_URL: http://telegram_bot:5000
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      LLMService__Url: http://llm_service:8002
+      ChatService__Url: http://chat_service:3001
+    depends_on:
+      - redis
+      - backend
 
   db:
     image: postgres:latest
