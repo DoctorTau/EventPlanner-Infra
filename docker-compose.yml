@@ -1,6 +1,6 @@
 services:
   backend:
-    image: drtau/eventplanner-backend:latest
+    image: drtau/eventplanner-backend:1.0.0
     container_name: event_planner_backend
     restart: always
     environment:
