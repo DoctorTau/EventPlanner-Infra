@@ -10,7 +10,16 @@ services:
       LLMService__Url: http://llm_service:8002
       ChatService__Url: http://chat_service:3001
     ports:
-      - "80:8080"
+      - "2281:8080"
+    
+  miniapp:
+    image: drtau/eventplanner-miniapp:1.0.0
+    container_name: event_planner_miniapp
+    restart: always
+    ports:
+      - "2282:3000"
+    environment:
+      API_SERVER_BASE_URL: http://backend:8080
 
   db:
     image: postgres:latest
