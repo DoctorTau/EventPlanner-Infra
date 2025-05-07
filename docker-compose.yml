@@ -6,7 +6,7 @@ services:
     environment:
       TOKEN: insert_token_here
       ConnectionStrings__DefaultConnection: Host=db;Port=5432;Username=admin;Password=admin;Database=event_planner
-      TelegramBotUrl: http://telegram_bot:5000
+      TelegramBotUrl: http://telegram_bot:3001
       LLMService__Url: http://llm_service:8002
       ChatService__Url: http://chat_service:3001
     ports:
@@ -29,8 +29,8 @@ services:
     container_name: event_planner_telegram_bot
     restart: always
     environment:
+      API_SERVER_BASE_URL: http://backend:8080
       TELEGRAM_BOT_TOKEN: insert_token_here
-      TELEGRAM_BOT_URL: http://telegram_bot:5000
       REDIS_HOST: redis
       REDIS_PORT: 6379
       LLMService__Url: http://llm_service:8002
