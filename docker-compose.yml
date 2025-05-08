@@ -25,11 +25,11 @@ services:
       API_SERVER_BASE_URL: http://backend:8080
 
   telegram_bot:
-    image: drtau/eventplanner-telegram-bot:1.0.0
+    image: drtau/eventplanner-bot:1.0.0
     container_name: event_planner_telegram_bot
     restart: always
     environment:
-      API_SERVER_BASE_URL: http://backend:8080
+      API_BASE_URL: http://backend:8080
       TELEGRAM_BOT_TOKEN: insert_token_here
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -38,6 +38,22 @@ services:
     depends_on:
       - redis
       - backend
+
+  llm_service:
+    image: drtau/eventplanner-llm:1.0.0
+    container_name: event_planner_llm_service
+    restart: always
+    ports:
+      - "8002:8002"
+    environment:
+      YC_URL: https://llm.api.cloud.yandex.net/foundationModels/v1/completion
+      YC_API_KEY: insert_api_key_here
+      YC_FOLDER_ID: insert_folder_id_here
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - redis
 
   db:
     image: postgres:latest
