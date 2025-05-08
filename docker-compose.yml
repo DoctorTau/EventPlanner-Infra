@@ -4,7 +4,7 @@ services:
     container_name: event_planner_backend
     restart: always
     environment:
-      TOKEN: insert_token_here
+      TOKEN: ${TOKEN}
       ConnectionStrings__DefaultConnection: Host=db;Port=5432;Username=admin;Password=admin;Database=event_planner
       TelegramBotUrl: http://telegram_bot:3001
       LLMService__Url: http://llm_service:8002
@@ -30,7 +30,7 @@ services:
     restart: always
     environment:
       API_BASE_URL: http://backend:8080
-      TELEGRAM_BOT_TOKEN: insert_token_here
+      BOT_TOKEN: ${BOT_TOKEN}
       REDIS_HOST: redis
       REDIS_PORT: 6379
       LLMService__Url: http://llm_service:8002
@@ -47,8 +47,8 @@ services:
       - "8002:8002"
     environment:
       YC_URL: https://llm.api.cloud.yandex.net/foundationModels/v1/completion
-      YC_API_KEY: insert_api_key_here
-      YC_FOLDER_ID: insert_folder_id_here
+      YC_API_KEY: ${YC_API_KEY}
+      YC_FOLDER_ID: ${YC_FOLDER_ID}
 
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -79,7 +79,12 @@ services:
     restart: always
     volumes:
       - redis_data:/data
-
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 volumes:
   pgdata:
   redis_data:
